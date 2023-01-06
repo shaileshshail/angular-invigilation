@@ -32,5 +32,8 @@ export class EventsService {
     return this.http.delete(url+'delete/'+id,{headers:this.headers});
   }
 
+  getClassrooms(){
+    return this.http.get<any[]>(url+'classrooms/',{headers:this.headers});
+  }
 
 }

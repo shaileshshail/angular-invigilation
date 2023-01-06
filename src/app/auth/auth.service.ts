@@ -5,6 +5,7 @@ import { app } from '../firebase.config';
 import { Form } from '../interfaces/form';
 import { HttpClient } from '@angular/common/http';
 import { FastapiService } from './fastapi.service';
+import jwtDecode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,13 @@ export class AuthService implements OnInit {
   result: any;
   isAuthenticated: boolean = false;
   isLoading: boolean = false;
-
-  accesstoken!:any;
+  isAdmin: boolean = false;
+  userInfo = {
+    email: " ",
+    privilege: "user",
+    exp: 0
+  };
+  accesstoken!: any;
   setisAuthenticated() {
     this.isAuthenticated = true;
   }
@@ -50,8 +56,9 @@ export class AuthService implements OnInit {
     const auth = getAuth(app);
     signOut(auth)
       .then(() => {
-        this.router.navigateByUrl('login');
+        this.router.navigateByUrl('');
         this.isAuthenticated = false;
+        this.isAdmin = false;
         localStorage.clear()
       })
       .catch((error) => {
@@ -69,12 +76,9 @@ export class AuthService implements OnInit {
   }
   alreadyLoggedIn() {
     if (this.verifyIdToken(localStorage.getItem('result'))) {
-      this.result=localStorage.getItem('result')
-      this.result=JSON.parse(this.result)
+      this.result = localStorage.getItem('result')
+      this.result = JSON.parse(this.result)
       this.tokenSend()
-      console.log('already logged in')
-      this.setisAuthenticated();
-      this.router.navigateByUrl('events');
     }
     else {
       console.log('else')
@@ -100,7 +104,7 @@ export class AuthService implements OnInit {
       .then((result) => {
         this.result = result;
         console.log(result);
-        localStorage.setItem("result",JSON.stringify(this.result))
+        localStorage.setItem("result", JSON.stringify(this.result))
         this.tokenSend();
       })
       .catch((error) => {
@@ -109,26 +113,35 @@ export class AuthService implements OnInit {
   }
   tokenSend() {
     this.fastapi.logingoogle(this.result._tokenResponse).subscribe(
-      (data) => {
-        if(data=='expired'){
+      (accessToken) => {
+        if (accessToken == 'expired') {
           localStorage.clear();
         }
-        else{
-          console.log(data);
-          this.setisAuthenticated();
-          this.accesstoken=data;
-          console.log(this.accesstoken)
-          localStorage.setItem("accesstoken",this.accesstoken);
+        else if(accessToken == 'invalid'){
 
-          setTimeout(() =>
-          {
+        }
+        else {
+          console.log(accessToken);
+          this.setisAuthenticated();
+          this.accesstoken = accessToken;
+          this.userInfo = jwtDecode(this.accesstoken);
+          console.log(this.userInfo);
+          if (this.userInfo.privilege == 'admin') {
+            this.isAdmin = true;
+          }
+          else {
+            this.isAdmin = false;
+          }
+          localStorage.setItem("accesstoken", this.accesstoken);
+
+          setTimeout(() => {
             this.router.navigateByUrl('events');
           },
-          1000);
+            1000);
         }
 
       },
-      (error)=>{
+      (error) => {
         console.log(error.code);
       }
     );

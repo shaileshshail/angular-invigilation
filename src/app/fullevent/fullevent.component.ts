@@ -24,6 +24,7 @@ export class FulleventComponent implements OnInit{
   }
   ngOnInit(){
     this.retriveData();
+    console.log(this.event.date)
   }
   isLoading(){
     return this.eventService.isLoading;

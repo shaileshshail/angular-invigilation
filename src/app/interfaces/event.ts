@@ -6,6 +6,7 @@
       session: string;
       id: number;
       staffs: string;
+      backup: string;
   }
 
 

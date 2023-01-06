@@ -1,16 +1,23 @@
-<nav class="flex justify-between p-4 bg-blue-300 text-white">
-  <div class="pl-4">
-      <a routerLink="events"><img src="\assets\headlogo.png" width="300" ></a>
-  </div>
-  <div class="text-2xl flex justify-center" >
-      <ng-container *ngIf="!isAuthenticated()" >
-          <button routerLink=""> Login</button>
-      </ng-container>
-      <ng-container *ngIf="isAuthenticated()" >
-          <button class="mx-4" (click)="logout()">Logout</button>
-      </ng-container>
+<div class="text-black bg-orange-100 h-full">
+  <nav class="flex justify-between p-4 bg-blue-900 text-white">
+    <div class="pl-4">
+        <a routerLink="events"><img src="\assets\headlogo.png" width="300" ></a>
+    </div>
 
-  </div>
-</nav>
+    <div class="text-2xl flex justify-center" >
+      <div *ngIf="isAdmin()">
+        <button routerLink="adduser" >Add User</button>
+      </div>
+        <ng-container *ngIf="!isAuthenticated()" >
+            <button routerLink=""> Login</button>
+        </ng-container>
+        <ng-container *ngIf="isAuthenticated()" >
+            <button class="mx-4" (click)="logout()">Logout</button>
+        </ng-container>
 
-<router-outlet></router-outlet>
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+
+</div>

@@ -1,7 +1,5 @@
-import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { Event } from '../interfaces/event';
 import { EventsService } from '../services/events.service';
 
 @Component({
@@ -10,15 +8,17 @@ import { EventsService } from '../services/events.service';
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent implements OnInit {
+
   constructor(private eventService: EventsService, private router: Router, private ref: ChangeDetectorRef) {
 
   } /** whenever class is created get data */
+  addMessage!: any;
   events: any[] = [];
   newEvent: any = {
     id: 0,
     title: '',
     session: 'FN',
-    date: '',
+    date: (new Date).toISOString().split('T')[0],
     classrooms: '[ ]',
   };
 
@@ -27,11 +27,19 @@ export class EventsComponent implements OnInit {
   }
   handleChildReturn(id: number) {
     this.eventService.deleteEvent(id).subscribe(
-      (data) =>{ console.log(data);this.loadAll();}
+      (data) => { this.loadAllEvents(); }
     );
   }
+  hand(event: any) {
+    this.newEvent.classrooms=JSON.stringify(event);
+    console.log(this.newEvent.classroom);
 
-  loadAll() {
+    }
+
+
+
+
+  loadAllEvents() {
     this.eventService.getEvents().subscribe((data) => {
       this.events = data.map((d) => {
         return {
@@ -46,12 +54,17 @@ export class EventsComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.loadAll();
+    this.loadAllEvents();
   }
 
   addEvent() {
+    console.log(this.newEvent)
     this.eventService.addEvents(this.newEvent).subscribe(
-      (data) => { console.log(data);    this.loadAll();
+      (data) => {
+        console.log(data);
+
+        this.addMessage = data;
+        this.loadAllEvents();
       }
     );
   }

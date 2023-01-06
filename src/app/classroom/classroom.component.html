@@ -1,0 +1,23 @@
+<div class="bg-gray-200 border rounded">
+  <div >
+    <div *ngFor="let i of isMasterSel" class="flex justify-evenly flex-row p-4">
+      <mat-checkbox
+            [(ngModel)]="i.isSelected"
+            [color]="'primary'"
+            (change)="masterchange(i.block)">
+            {{i.block}}
+      </mat-checkbox>
+      <ng-container *ngFor="let j of classrooms">
+        <div *ngIf="i.block==j.block">
+
+          <mat-checkbox
+            [(ngModel)]="j.isSelected"
+            [color]="'warm'"
+            (change)="handle(j.block)">
+            {{j.classroom}}
+          </mat-checkbox>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

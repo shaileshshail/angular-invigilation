@@ -11,6 +11,8 @@ import { initializeApp } from "firebase/app";
 import { HttpClientModule } from "@angular/common/http";
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdduserModule } from "./adduser/adduser.module";
+import { ClassroomComponent } from './classroom/classroom.component';
 
 
 
