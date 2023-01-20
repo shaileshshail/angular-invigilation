@@ -1,5 +1,5 @@
 ![Alt text](preview/login.png?raw=true "Title")
-![Alt text](preview/google pop.png?raw=true "Title")
+![Alt text](preview/google popup.png?raw=true "Title")
 ![Alt text](preview/login.png?raw=true "Title")
 ![Alt text](preview/login.png?raw=true "Title")
 ![Alt text](preview/login.png?raw=true "Title")
