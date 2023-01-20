@@ -25,21 +25,30 @@ export class EventsComponent implements OnInit {
   isLoading() {
     return false;
   }
+
   handleChildReturn(id: number) {
     this.eventService.deleteEvent(id).subscribe(
-      (data) => { this.loadAllEvents(); }
+      (data) => {
+        console.log(data);
+      }, (error) => { },
+       () => {
+        this.events=[]
+
+        this.loadAllEvents();
+      }
     );
   }
   hand(event: any) {
-    this.newEvent.classrooms=JSON.stringify(event);
+    this.newEvent.classrooms = JSON.stringify(event);
     console.log(this.newEvent.classroom);
 
-    }
+  }
 
 
 
 
   loadAllEvents() {
+    console.log('here')
     this.eventService.getEvents().subscribe((data) => {
       this.events = data.map((d) => {
         return {
@@ -51,6 +60,8 @@ export class EventsComponent implements OnInit {
         };
       });
       this.ref.detectChanges();
+    }, (error) => {
+      console.log(error)
     });
   }
   ngOnInit(): void {

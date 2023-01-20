@@ -11,6 +11,8 @@ export class UserComponent {
   @Output() userEmitter = new EventEmitter<String>();/** EventEmitter -> angular core \ Event-> interface \ userEmitter-> var to catch in parent html*/
 
   deleteUser(){
-    this.userEmitter.emit(this.user.email);
+    if(    confirm("Do you want to delete "+this.user.email)    ){
+      this.userEmitter.emit(this.user.email);
+    }
   }
 }
