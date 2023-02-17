@@ -103,8 +103,7 @@ export class AuthService implements OnInit {
     signInWithPopup(auth, provider)
       .then((result) => {
         this.result = result;
-        console.log(result);
-        localStorage.setItem("result", JSON.stringify(this.result))
+
         this.tokenSend();
       })
       .catch((error) => {
@@ -115,12 +114,14 @@ export class AuthService implements OnInit {
     this.fastapi.logingoogle(this.result._tokenResponse).subscribe(
       (accessToken) => {
         if (accessToken == 'expired') {
-          localStorage.clear();
+          console.log("expired");
         }
         else if(accessToken == 'invalid'){
-
+          console.log("invalid");
         }
         else {
+          console.log(this.result);
+          localStorage.setItem("result", JSON.stringify(this.result))
           console.log(accessToken);
           this.setisAuthenticated();
           this.accesstoken = accessToken;
@@ -137,7 +138,7 @@ export class AuthService implements OnInit {
           setTimeout(() => {
             this.router.navigateByUrl('events');
           },
-            1000);
+            100);
         }
 
       },

@@ -18,10 +18,15 @@ export class EventsComponent implements OnInit {
     id: 0,
     title: '',
     session: 'FN',
+    class_count:0,
     date: (new Date).toISOString().split('T')[0],
     classrooms: '[ ]',
   };
-
+  total_count:any=36;
+  selected_count:any=0;
+  block_count:any=[];
+  block_count1:any={};
+  block_names:any=[];
   isLoading() {
     return false;
   }
@@ -39,12 +44,14 @@ export class EventsComponent implements OnInit {
     );
   }
   hand(event: any) {
-    this.newEvent.classrooms = JSON.stringify(event);
-    console.log(this.newEvent.classroom);
+    this.newEvent.classrooms = JSON.stringify(event[0]);
 
+    this.total_count= event[1];
+    this.selected_count= event[2];
+    this.block_count=event[3][1];
+    this.block_names=event[3][0];
+    console.log(event[3]);
   }
-
-
 
 
   loadAllEvents() {
@@ -55,6 +62,7 @@ export class EventsComponent implements OnInit {
           date: d.date,
           classrooms: d.classrooms,
           title: d.title,
+          class_count:this.total_count,
           session: d.session,
           id: d.id,
         };
@@ -69,6 +77,7 @@ export class EventsComponent implements OnInit {
   }
 
   addEvent() {
+
     console.log(this.newEvent)
     this.eventService.addEvents(this.newEvent).subscribe(
       (data) => {

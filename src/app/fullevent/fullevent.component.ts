@@ -2,7 +2,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { EventsService } from '../services/events.service';
 import { Event } from '../interfaces/event';
+import html2canvas from 'html2canvas';
+import autoTable from 'jspdf-autotable'
 
+
+
+import { jsPDF } from "jspdf";
 
 @Component({
   selector: 'app-fullevent',
@@ -13,18 +18,38 @@ export class FulleventComponent implements OnInit{
   constructor(private activatedRouter:ActivatedRoute,private eventService:EventsService,private ref: ChangeDetectorRef){}
   id:number=0;
   event:any={};
+  docDefinition:any={
 
+  };
+  table:any=[];
   retriveData(){
     this.id=Number(this.activatedRouter.snapshot.paramMap.get('id'));
     this.eventService.getEvent(this.id).subscribe((data) =>{
       this.event=data;
-      console.log(data);      this.ref.detectChanges();
-
+      console.log(data);
+      this.ref.detectChanges();
+      for (let i = 0; i < JSON.parse(this.event.classrooms).length; i++) {
+        this.table.push([i+1,JSON.parse(this.event.classrooms)[i],JSON.parse(this.event.staffs)[i][1] , JSON.parse(this.event.staffs)[i][0]]);
+      };
+      console.log(this.table);
     });
   }
   ngOnInit(){
     this.retriveData();
     console.log(this.event.date)
+
+  }
+
+  downloadpdf(){
+    const doc = new jsPDF();
+
+    autoTable(doc, {
+      head: [['Id', 'Classrooms', 'Email',"Name"]],
+      body: this.table ,
+    });
+
+
+    doc.save(this.event.date+"-"+this.event.session+".pdf");
   }
   isLoading(){
     return this.eventService.isLoading;

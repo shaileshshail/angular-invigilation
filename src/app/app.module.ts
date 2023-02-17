@@ -13,12 +13,15 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdduserModule } from "./adduser/adduser.module";
 import { ClassroomComponent } from './classroom/classroom.component';
+import { StaffreportModule } from "./staffreport/staffreport.module";
+import { CommonModule } from "@angular/common";
+import { StaffhomeComponent } from './staffhome/staffhome.component';
 
 
 
 @NgModule({
   declarations: [AppComponent, NotFoundComponent],
-  imports: [BrowserModule,RouterModule,AppRoutingModule,AuthModule,HttpClientModule, BrowserAnimationsModule],
+  imports: [BrowserModule,RouterModule,AppRoutingModule,AuthModule,HttpClientModule, BrowserAnimationsModule,CommonModule],
   bootstrap: [AppComponent]
 })
 
